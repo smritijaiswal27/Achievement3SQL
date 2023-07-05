@@ -1,0 +1,10 @@
+1.	Write a query to find the top 10 countries for Rockbuster in terms of customer numbers
+
+SELECT COUNT(A.customer_id) AS number_of_customers,D.country
+FROM customer A
+INNER JOIN customer B ON A.address_id=B.address_id
+INNER JOIN city C ON B.city_id=C.city_id
+INNER JOIN country D ON C.country_id=D.country_id
+GROUP BY country
+ORDER BY number_of_customers DESC
+LIMIT 10;
