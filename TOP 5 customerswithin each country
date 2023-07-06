@@ -1,0 +1,29 @@
+How many of the TOP 5 customers are based within each country.
+
+With top_5_cte(total_amount_paid,first_name,last_name,customer_id,city,country AS
+(
+SELECT SUM(amount) AS total_amount_paid
+B.first_name
+B.last_name
+B.customer_id
+D.city
+E.country
+FROM payment A
+INNER JOIN customer B ON A.customer_id=B.customer_id
+INNER JOIN address C ON B.address_id=B.address_id
+INNER JOIN D ON C.city_id=D.city_id
+INNER JOIN country E ON D.country_id=E.country_id
+WHERE city IN ('Aurora','Atlixco','Xintai','Adoni','Dhule(Dhulia)','Kurashiki,''Pingxiang','Sivas','Celaya','So Leopoldo')
+ORDER BY total_amount_paid DESC
+LIMIT 5;
+)
+SELECT A.country,
+COUNT (DISTINCT D.customer_id) AS all_customer_count
+COUNT(DISTINCT top_5_cte.customer_id) AS top_customer_count
+FROM country A
+INNER JOIN city B ON A.country_id=B.country_id
+INNER JOIN address C ON B.city_id=C.city_id
+INNER JOIN customer D ON C.address_id=D.address_id
+LEFT JOIN top_5_cte ON customer_id=top_5_cte.customer_id
+GROUP BY A.country
+ORDER BY all_customer_count DESC
